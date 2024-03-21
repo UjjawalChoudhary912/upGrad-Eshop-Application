@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import {ShoppingCart} from "@mui/icons-material";
 import {useContext, useState} from "react";
 import AppBarSearch from "../appBarSearch/AppBarSearch";
-import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
+import {BrowserRouter as Router, Link, Navigate, Route, Routes} from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import Login from "../login/Login";
 import SignUp from "../signup/SignUp";
@@ -21,14 +21,13 @@ import Logout from "../logout/Logout";
 import useAuthentication from "../../hooks/useAuthentication";
 import {createProduct, modifyProduct} from "../../api";
 import BroadcastMessage from "../broadcastMessage/BroadcastMessage";
-import Logout from '../logout/Logout';
-
+import Home from './home/Home';
+import ProtectedRoute from "../protectedRoute/ProtectedRoute";
 
 const PageSetUp = () => {
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const {AuthCtx} = useAuthentication();
 	const {loggedInUser, hasRole} = useContext(AuthCtx);
-
 	const pages = [
 		{
 			id: "1",
@@ -55,15 +54,12 @@ const PageSetUp = () => {
 			visible: loggedInUser == null,
 		},
 	];
-
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
 	};
-
 	const handleCloseNavMenu = () => {
 		setAnchorElNav(null);
 	};
-
 	return (
 		<Router>
 			<AppBar sx={{ bgcolor: "#3f51b5", position: 'fixed' }}>
@@ -85,7 +81,6 @@ const PageSetUp = () => {
 						>
 							upGrad E-Shop
 						</Typography>
-
 						<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 							<IconButton
 								size="large"
@@ -135,7 +130,6 @@ const PageSetUp = () => {
 								}
 							</Menu>
 						</Box>
-
 						<ShoppingCart sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
 						<Typography
 							variant="h6"
@@ -153,11 +147,8 @@ const PageSetUp = () => {
 						>
 							upGrad E-Shop
 						</Typography>
-
 						<Box sx={{ flexGrow: 1 }} />
-
 						{loggedInUser != null && <AppBarSearch />}
-
 						<Box sx={{ flexGrow: 1 }} />
 						<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 							{pages.map((element) => {
@@ -186,7 +177,20 @@ const PageSetUp = () => {
 			<Container maxWidth={false} sx={{marginBottom: "30px", marginTop: "85px"}}>
 				<Grid container spacing={2} sx={{paddingTop: "24px"}}>
 					<Routes>
-
+						<Route
+							path="/"
+							element={
+								<Navigate to="/home" />
+							}
+						/>
+						<Route
+							path="/home"
+							element={
+								<ProtectedRoute>
+									<Home/>
+								</ProtectedRoute>
+							}
+						/>
 						<Route
 							path="/login"
 							element={
@@ -199,7 +203,6 @@ const PageSetUp = () => {
 								<SignUp/>
 							}
 						/>
-
 						<Route
 							path="*"
 							element={
@@ -214,5 +217,4 @@ const PageSetUp = () => {
 		</Router>
 	);
 };
-
 export default PageSetUp;
