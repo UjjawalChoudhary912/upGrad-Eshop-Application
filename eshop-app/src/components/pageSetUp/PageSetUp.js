@@ -21,7 +21,7 @@ import Logout from "../logout/Logout";
 import useAuthentication from "../../hooks/useAuthentication";
 import {createProduct, modifyProduct} from "../../api";
 import BroadcastMessage from "../broadcastMessage/BroadcastMessage";
-import Home from './home/Home';
+import Home from '../home/Home';
 import ProtectedRoute from "../protectedRoute/ProtectedRoute";
 
 const PageSetUp = () => {
