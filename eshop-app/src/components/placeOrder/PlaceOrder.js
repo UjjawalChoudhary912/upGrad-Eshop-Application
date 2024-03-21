@@ -7,7 +7,7 @@ import useAuthentication from "../../hooks/useAuthentication";
 import Address from "../address/Address";
 import Button from "@mui/material/Button";
 import OrderDetails from "../orderDetails/OrderDetails";
-import {createOrder} from "../../api";
+import {createOrder} from "../../api/orderAPIs";
 import useServices from "../../hooks/useServices";
 
 const PlaceOrder = () => {

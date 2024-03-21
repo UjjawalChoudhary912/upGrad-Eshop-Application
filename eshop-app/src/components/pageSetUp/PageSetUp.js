@@ -13,15 +13,16 @@ import {useContext, useState} from "react";
 import AppBarSearch from "../appBarSearch/AppBarSearch";
 import {BrowserRouter as Router, Link, Navigate, Route, Routes} from "react-router-dom";
 import Grid from '@mui/material/Grid';
+import Home from '../home/Home';
 import Login from "../login/Login";
 import SignUp from "../signup/SignUp";
 import Footer from "../footer/Footer";
 import ErrorPage from "../errorPage/ErrorPage";
 import Logout from "../logout/Logout";
 import useAuthentication from "../../hooks/useAuthentication";
-import {createProduct, modifyProduct} from "../../api";
+import {createProduct, modifyProduct} from "../../api/productAPIs";
 import BroadcastMessage from "../broadcastMessage/BroadcastMessage";
-import Home from '../home/Home';
+
 import ProtectedRoute from "../protectedRoute/ProtectedRoute";
 
 const PageSetUp = () => {

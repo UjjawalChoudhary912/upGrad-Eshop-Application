@@ -1,4 +1,5 @@
-import {fetchAllCategories, fetchAllProducts} from "../../api";
+import {fetchAllProducts} from "../../api/productAPIs";
+import {fetchAllCategories} from "../../api/categoryAPIs";
 
 export const setFilter = (category) => {
 	return {
