@@ -21,8 +21,8 @@ const theme = createTheme({
 
 function App() {
 	const dispatch = useDispatch();
-	const initPageData = useCallback((dispatchEvent = dispatch) => {
-		dispatchEvent(initCatalog());
+	const initPageData = useCallback(() => {
+		dispatch(initCatalog());
 	}, [dispatch]);
 	useEffect(() => {
 		initPageData();

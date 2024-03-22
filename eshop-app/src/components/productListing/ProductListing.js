@@ -19,7 +19,7 @@ const ProductListing = ({mode, productList, sortBy, category, reFetchAllData}) =
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [product, setProduct] = useState(null);
 	const {AuthCtx} = useAuthentication();
-	const {accessToken} = useContext(AuthCtx);
+	const {accessToken, isAccessTokenValid, logout} = useContext(AuthCtx);
 	const [busy, setBusy] = useState(false);
 	const {ServicesCtx} = useServices();
 	const {broadcastMessage} = useContext(ServicesCtx);
@@ -132,16 +132,23 @@ const ProductListing = ({mode, productList, sortBy, category, reFetchAllData}) =
 	const proceedDelete = () => {
 		setBusy(true);
 		setDeleteModal(false);
-		deleteProduct(product.id, accessToken).then(() => {
-			broadcastMessage("Product " + product.name + " deleted successfully.", "success");
-			setBusy(false);
-			setProduct(null);
-			reFetchAllData();
-		}).catch((json) => {
-			broadcastMessage(json.reason, "error");
-			setBusy(false);
-			setProduct(null);
-		});
+		if(isAccessTokenValid()) {
+			deleteProduct(product.id, accessToken).then(() => {
+				broadcastMessage("Product " + product.name + " deleted successfully.", "success");
+				setBusy(false);
+				setProduct(null);
+				reFetchAllData();
+			}).catch((json) => {
+				broadcastMessage(json.reason, "error");
+				setBusy(false);
+				setProduct(null);
+			});
+		} else {
+			broadcastMessage("Session expired. Please login again!", "info");
+			logout().then(() => {
+				navigate("/login");
+			});
+		}
 	};
 
 	let products = getFilteredProductsBasedOnQuery(getSortedProducts(getFilteredProducts(productList, category), sortBy), searchFor);
