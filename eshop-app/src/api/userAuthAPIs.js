@@ -1,3 +1,5 @@
+import jwt_decode from "jwt-decode";
+
 export const doLogin = (email, password) => {
 	let promiseResolveRef = null;
 	let promiseRejectRef = null;
@@ -17,13 +19,13 @@ export const doLogin = (email, password) => {
 	}).then((response) => {
 		response.json().then((json) => {
 			if(response.ok) {
+				let decoded = jwt_decode(json.token);
 				promiseResolveRef({
 					username: email,
 					accessToken: json.token,
-					accessTokenTimeout: Date.now() + 300000,
-					// TODO: roles and userid
-					roles: ["ADMIN"],
-					userId: "64c23ff0ad1739210133a348",
+					accessTokenTimeout: decoded.exp * 1000, //convert to epoch
+					roles: json.roles,
+					userId: json.userId,
 					response: response,
 				});
 			} else {
