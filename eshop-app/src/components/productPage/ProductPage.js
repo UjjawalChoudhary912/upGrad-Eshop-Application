@@ -200,7 +200,7 @@ const ProductPage = ({categories, mode, headingText, buttonText, callbackFunctio
 						valid = false;
 						message = "Description can be of length 255 characters";
 					} else {
-						valid = matchRegex(value, "^([A-Za-z0-9_@%*.-\\s\\[\\]\\,\\(\\)]{1,255})$");
+						valid = matchRegex(value, "^([A-Za-z0-9_@%*.-\\s\\[\\]\\,\\(\\)\\']{1,255})$");
 						message = "Please enter valid description.";
 					}
 					break;

@@ -66,10 +66,11 @@ const ProductListing = ({mode, productList, sortBy, category, reFetchAllData}) =
 						return 0;
 					}
 				} else if (s === "NEWEST") {
-					//TODO: no field name createdate/modifieddate
-					if(a.price < b.price) {
+                    let aTime = new Date(a.lastUpdated);
+					let bTime = new Date(b.lastUpdated);
+					if(aTime < bTime) {
 						return 1;
-					} else if(a.price > b.price) {
+					} else if(aTime > bTime) {
 						return -1;
 					} else {
 						return 0;

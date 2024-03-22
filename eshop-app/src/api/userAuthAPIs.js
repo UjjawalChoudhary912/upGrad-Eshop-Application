@@ -1,4 +1,4 @@
-import jwt_decode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 export const doLogin = (email, password) => {
 	let promiseResolveRef = null;
