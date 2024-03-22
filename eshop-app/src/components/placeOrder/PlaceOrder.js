@@ -22,7 +22,7 @@ const PlaceOrder = () => {
 	const {broadcastMessage} = useContext(ServicesCtx);
 	const [activeStep, setActiveStep] = useState(0);
 	const {AuthCtx} = useAuthentication();
-	const {loggedInUserId, accessToken} = useContext(AuthCtx);
+	const {loggedInUserId, accessToken, isAccessTokenValid, logout} = useContext(AuthCtx);
 	const navigate = useNavigate();
 	const location = useLocation();
 	let json = location.state;
@@ -140,12 +140,19 @@ const PlaceOrder = () => {
 	};
 
 	let confirmAndPlaceOrder = () => {
-		createOrder(orderDetails, accessToken).then(() => {
-			broadcastMessage("Order placed successfully!", "success");
-			navigate("/home");
-		}).catch((json) => {
-			broadcastMessage(json.reason, "error");
-		});
+        if(isAccessTokenValid()) {
+			createOrder(orderDetails, accessToken).then(() => {
+				broadcastMessage("Order placed successfully!", "success");
+				navigate("/home");
+			}).catch((json) => {
+				broadcastMessage(json.reason, "error");
+			});
+		} else {
+			broadcastMessage("Session expired. Please login again!", "info");
+			logout().then(() => {
+				navigate("/login");
+			});
+		}
 	};
 
 	return (
