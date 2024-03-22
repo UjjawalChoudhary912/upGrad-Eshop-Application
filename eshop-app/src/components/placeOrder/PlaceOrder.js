@@ -9,12 +9,18 @@ import Button from "@mui/material/Button";
 import OrderDetails from "../orderDetails/OrderDetails";
 import {createOrder} from "../../api/orderAPIs";
 import useServices from "../../hooks/useServices";
+import ItemDetail from "../itemDetail/ItemDetail";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
 const PlaceOrder = () => {
 
+	const [showInfo, setShowInfo] = useState(false);
+	const [showMessage, setShowMessage] = useState("");
+	const [showMessageLevel, setShowMessageLevel] = useState("error");
 	const {ServicesCtx} = useServices();
 	const {broadcastMessage} = useContext(ServicesCtx);
-	const [activeStep, setActiveStep] = useState(1);
+	const [activeStep, setActiveStep] = useState(0);
 	const {AuthCtx} = useAuthentication();
 	const {loggedInUserId, accessToken} = useContext(AuthCtx);
 	const navigate = useNavigate();
@@ -39,7 +45,6 @@ const PlaceOrder = () => {
 	useEffect(() => {
 		initPageData();
 	}, [initPageData]);
-
 	const [orderDetails, setOrderDetails] = useState({
 		quantity: (json !== null) ? (json.quantity || null) : null,
 		user: loggedInUserId,
@@ -47,12 +52,11 @@ const PlaceOrder = () => {
 		address: null,
 		addressObject : null
 	});
-
 	let stepperArray = [
 		{
 			labelOrder: 1,
 			label: "Items",
-			completed: true,
+			completed: false,
 		},
 		{
 			labelOrder: 2,
@@ -68,6 +72,12 @@ const PlaceOrder = () => {
 
 	const [stepsForOrdering, setStepsForOrdering] = useState(stepperArray);
 
+	let hideAndResetMessage = () => {
+		setShowInfo(false);
+		setShowMessage("");
+		setShowMessageLevel("error");
+	};
+
 	let saveAddressForDelivery = (obj) => {
 		setOrderDetails({
 			...orderDetails,
@@ -77,7 +87,7 @@ const PlaceOrder = () => {
 	};
 
 	let moveToPreviousStep = () => {
-		if(activeStep === 1) {
+		if(activeStep === 0) {
 			navigate("/product/view", {
 				state: JSON.stringify({
 					value: json.product,
@@ -101,24 +111,31 @@ const PlaceOrder = () => {
 	};
 
 	let validateAndMoveToNextStep = () => {
+		let moveToNext = true;
 		if(activeStep === 1) {
 			if(orderDetails.address === undefined || orderDetails.address === null) {
-
-			} else {
-				let arr = [];
-				for(let i = 0; i < stepsForOrdering.length; i++) {
-					if(i === activeStep) {
-						arr.push({
-							...stepsForOrdering[activeStep],
-							completed: true,
-						});
-					} else {
-						arr.push(stepsForOrdering[i]);
-					}
-				}
-				setStepsForOrdering(arr);
-				setActiveStep(activeStep + 1);
+				setShowInfo(true);
+				setShowMessage("Please select address!");
+				setShowMessageLevel("error");
+				moveToNext = false;
 			}
+		}
+		if(moveToNext) {
+			let arr = [];
+			for (let i = 0; i < stepsForOrdering.length; i++) {
+				if (i === activeStep) {
+					arr.push({
+						...stepsForOrdering[activeStep],
+						completed: true,
+					});
+				} else {
+					arr.push(stepsForOrdering[i]);
+				}
+			}
+			setStepsForOrdering(arr);
+			setActiveStep(activeStep + 1);
+		} else {
+			setActiveStep(activeStep);
 		}
 	};
 
@@ -126,8 +143,8 @@ const PlaceOrder = () => {
 		createOrder(orderDetails, accessToken).then(() => {
 			broadcastMessage("Order placed successfully!", "success");
 			navigate("/home");
-		}).catch(() => {
-			broadcastMessage("Please select address!", "error");
+		}).catch((json) => {
+			broadcastMessage(json.reason, "error");
 		});
 	};
 
@@ -162,11 +179,20 @@ const PlaceOrder = () => {
 					</div>
 				</Grid>
 				{
+					activeStep === 0 &&
+					<Grid item xs={12}>
+						<div style={{display: 'flex', justifyContent: 'center'}}>
+							<ItemDetail />
+						</div>
+					</Grid>
+				}
+				{
 					activeStep === 1 &&
 					<Grid item xs={12}>
 						<div style={{display: 'flex', justifyContent: 'center'}}>
 							<Address
 								callbackFunction={saveAddressForDelivery}
+								address={orderDetails.addressObject}
 							/>
 						</div>
 					</Grid>
@@ -192,7 +218,7 @@ const PlaceOrder = () => {
 							BACK
 						</Button>
 						{
-							activeStep === 1 &&
+							(activeStep === 0 || activeStep === 1) &&
 							<Button variant="contained"
 									color="primary"
 									onClick={() => validateAndMoveToNextStep()}
@@ -213,8 +239,17 @@ const PlaceOrder = () => {
 					</div>
 				</Grid>
 			</Grid>
+			<Snackbar
+				anchorOrigin={{vertical: "top", horizontal: "right"}}
+				open={showInfo}
+				autoHideDuration={4000}
+				onClose={() => hideAndResetMessage()}
+			>
+				<Alert onClose={() => hideAndResetMessage()} severity={showMessageLevel} sx={{width: '100%'}}>
+					{showMessage}
+				</Alert>
+			</Snackbar>
 		</Box>
 	);
 };
-
 export default PlaceOrder;

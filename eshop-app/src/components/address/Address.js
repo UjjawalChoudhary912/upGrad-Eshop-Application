@@ -13,7 +13,7 @@ import {FormControl, InputLabel, Select} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import useServices from "../../hooks/useServices";
 
-const Address = ({callbackFunction}) => {
+const Address = ({callbackFunction, address}) => {
 
 	let initialState = {
 		name: {
@@ -52,6 +52,12 @@ const Address = ({callbackFunction}) => {
 			errorMessage: null,
 		},
 	};
+      
+    if(address !== null && address != undefined) {
+		address = address.id;
+	} else {
+		address = "";
+	}
 
 	const [formData, setFormData] = useState(initialState);
 	const [selectedAddress, setSelectedAddress] = useState("");
@@ -235,7 +241,27 @@ const Address = ({callbackFunction}) => {
 													key={"sortBy_" + index}
 													value={element.id}
 												>
-													{element.name + " " + element.zipcode}
+													{element.name + ", Contact Number : " + element.contactNumber}
+													<br/>
+													{
+														((element) => {
+															if(element.landmark !== null) {
+																return (
+																	<>
+																		{element.street + ", " + element.landmark}
+																	</>
+																);
+															} else {
+																return (
+																	<>
+																		{element.street}
+																	</>
+																);
+															}
+														})(element)
+													}
+													<br/>
+													{element.city + ", " + element.state + ", " + element.zipcode}
 												</MenuItem>
 											);
 										})
