@@ -137,7 +137,7 @@ const ProductListing = ({mode, productList, sortBy, category, reFetchAllData}) =
 				broadcastMessage("Product " + product.name + " deleted successfully.", "success");
 				setBusy(false);
 				setProduct(null);
-				reFetchAllData();
+				reFetchAllData(accessToken);
 			}).catch((json) => {
 				broadcastMessage(json.reason, "error");
 				setBusy(false);
@@ -237,7 +237,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		reFetchAllData: () => dispatch(initCatalog()),
+		reFetchAllData: (accessToken) => dispatch(initCatalog(accessToken)),
 	};
 };
 

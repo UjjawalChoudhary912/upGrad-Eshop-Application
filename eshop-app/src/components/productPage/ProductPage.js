@@ -133,7 +133,7 @@ const ProductPage = ({categories, mode, headingText, buttonText, callbackFunctio
 				callbackFunction(requestJson, accessToken).then(json => {
 					broadcastMessage(json.message, "success");
 					setBusy(false);
-					reFetchAllData();
+					reFetchAllData(accessToken);
 					navigate("/home");
 				}).catch(json => {
 					broadcastMessage(json.reason, "error");
@@ -395,7 +395,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		reFetchAllData: () => dispatch(initCatalog()),
+		reFetchAllData: (accessToken) => dispatch(initCatalog(accessToken)),
 	};
 };
 

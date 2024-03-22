@@ -14,8 +14,8 @@ export const clearFilter = () => {
 	}
 };
 
-export const initCatalog = () => dispatch => {
-	Promise.all([fetchAllCategories(), fetchAllProducts()]).then(json => {
+export const initCatalog = (accessToken) => dispatch => {
+	Promise.all([fetchAllCategories(accessToken), fetchAllProducts(accessToken)]).then(json => {
 		dispatch({
 			type: "INIT_CATALOG",
 			categories: json[0].data,

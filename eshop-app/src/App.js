@@ -2,7 +2,7 @@ import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PageSetUp from "./components/pageSetUp/PageSetUp";
 import {useDispatch} from "react-redux";
-import {useCallback, useEffect} from "react";
+import {useCallback, useContext, useEffect} from "react";
 import {initCatalog} from "./store/actions/metadataAction";
 
 const theme = createTheme({
@@ -20,10 +20,13 @@ const theme = createTheme({
 });
 
 function App() {
+
+	const {AuthCtx} = useAuthentication();
+	const {accessToken} = useContext(AuthCtx);
 	const dispatch = useDispatch();
 	const initPageData = useCallback(() => {
-		dispatch(initCatalog());
-	}, [dispatch]);
+		dispatch(initCatalog(accessToken));
+	}, [dispatch, accessToken]);
 	useEffect(() => {
 		initPageData();
 	}, [initPageData]);
