@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import OrderDetails from "../orderDetails/OrderDetails";
 import {createOrder} from "../../api/orderAPIs";
 import useServices from "../../hooks/useServices";
-import ItemDetail from "../itemDetail/ItemDetail";
+import ItemDetail from "../itemDetails/ItemDetails";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 

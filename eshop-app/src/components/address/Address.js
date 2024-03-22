@@ -12,6 +12,7 @@ import {createAddress, fetchAllAddresses} from "../../api/addressAPIs";
 import {FormControl, InputLabel, Select} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import useServices from "../../hooks/useServices";
+import {useNavigate} from "react-router-dom";
 
 const Address = ({callbackFunction, address}) => {
 
@@ -53,7 +54,7 @@ const Address = ({callbackFunction, address}) => {
 		},
 	};
       
-    if(address !== null && address != undefined) {
+    if(address !== null && address !== undefined) {
 		address = address.id;
 	} else {
 		address = "";
@@ -63,10 +64,11 @@ const Address = ({callbackFunction, address}) => {
 	const [selectedAddress, setSelectedAddress] = useState("");
 	const [busy, setBusy] = useState(false);
 	const {AuthCtx} = useAuthentication();
-	const {loggedInUserId, accessToken} = useContext(AuthCtx);
+	const {loggedInUserId, accessToken, isAccessTokenValid, logout} = useContext(AuthCtx);
 	const [addressList, setAddressList] = useState([]);
 	const {ServicesCtx} = useServices();
 	const {broadcastMessage} = useContext(ServicesCtx);
+    const navigate = useNavigate();
 
 	let validateData = () => {
 		setBusy(true);
@@ -91,15 +93,22 @@ const Address = ({callbackFunction, address}) => {
 		}
 		setFormData(data);
 		if(valid) {
-			createAddress(requestJson, accessToken).then(() => {
-				broadcastMessage("Address saved successfully.", "success");
-				setBusy(false);
-				setFormData(initialState);
-				initDropdown();
-			}).catch(json => {
-				broadcastMessage(json.reason, "error");
-				setBusy(false);
-			});
+            if(isAccessTokenValid()) {
+				createAddress(requestJson, accessToken).then(() => {
+					broadcastMessage("Address saved successfully.", "success");
+					setBusy(false);
+					setFormData(initialState);
+					initDropdown();
+				}).catch(json => {
+					broadcastMessage(json.reason, "error");
+					setBusy(false);
+				});
+			} else {
+				broadcastMessage("Session expired. Please login again!", "info");
+				logout().then(() => {
+					navigate("/login");
+				});
+			}
 		} else {
 			setBusy(false);
 		}
@@ -201,12 +210,19 @@ const Address = ({callbackFunction, address}) => {
 	};
 
 	const initDropdown = useCallback(() => {
-		fetchAllAddresses(accessToken).then((json) => {
-			setAddressList(json.data);
-		}).catch(() => {
-			setAddressList([]);
-		});
-	}, [accessToken]);
+		if(isAccessTokenValid()) {
+			fetchAllAddresses(accessToken).then((json) => {
+				setAddressList(json.data);
+			}).catch(() => {
+				setAddressList([]);
+			});
+		} else {
+			broadcastMessage("Session expired. Please login again!", "info");
+			logout().then(() => {
+				navigate("/login");
+			});
+		}
+	}, [accessToken, isAccessTokenValid, broadcastMessage, navigate, logout]);
 
 	useEffect(() => {
 		initDropdown();

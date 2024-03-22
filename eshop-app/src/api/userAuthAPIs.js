@@ -79,6 +79,12 @@ export const doSignup = (requestJson) => {
 					response: response,
 				});
 			}
+
+		}).catch((err) => {
+			promiseRejectRef({
+				reason: "Some error occurred. Please try again.",
+				response: err,
+			});
 		});
 	}).catch((err) => {
 		promiseRejectRef({
