@@ -6,7 +6,7 @@ import {useContext, useState} from "react";
 import {Modal} from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import {deleteProduct} from "../../api/productAPIs";
+import {deleteProduct, viewProduct} from "../../api/productAPIs";
 import useAuthentication from "../../hooks/useAuthentication";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -117,11 +117,25 @@ const ProductListing = ({mode, productList, sortBy, category, reFetchAllData}) =
 	};
 
 	let initiateViewProduct = (details) => {
-		navigate("/product/view", {
-			state: JSON.stringify({
-				value: details,
-			})
-		});
+        if(isAccessTokenValid()) {
+			setBusy(true);
+			viewProduct(details.id, accessToken).then((json) => {
+				navigate("/product/view", {
+					state: JSON.stringify({
+						value: json.value,
+					})
+				});
+				setBusy(false);
+			}).catch((json) => {
+				broadcastMessage(json.reason, "error");
+				setBusy(false);
+			});
+		} else {
+			broadcastMessage("Session expired. Please login again!", "info");
+			logout().then(() => {
+				navigate("/login");
+			});
+		}
 	};
 
 	let handleClose = () => {
