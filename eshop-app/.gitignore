@@ -1,23 +1,35 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Prerequisites	# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+*.d	
 
-# testing
-/coverage
 
-# production
-/build
+# Object files	# dependencies
+*.o	/node_modules
+*.ko	/.pnp
+*.obj	.pnp.js
+*.elf	
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
+
+# Linker output	# testing
+*.ilk	/coverage
+*.map	
+*.exp	
+
+
+# Precompiled Headers	# production
+*.gch	/build
+*.pch	
+
+
+# Libraries	# misc
+*.lib	.DS_Store
+*.a	.env.local
+*.la	.env.development.local
+*.lo	.env.test.local
 .env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+
+# Shared objects (inc. Windows DLLs)	npm-debug.log*
+*.dll	yarn-debug.log*
+*.so	yarn-error.log*
+*.so.*	
