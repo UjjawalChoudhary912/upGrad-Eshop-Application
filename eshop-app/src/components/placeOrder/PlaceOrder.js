@@ -190,8 +190,8 @@ const PlaceOrder = () => {
 					<Grid item xs={12}>
 						<div style={{display: 'flex', justifyContent: 'center'}}>
                         <ItemDetail
-								quantity={orderDetails.quantity}
-								product={json.product}
+																productQuantity={orderDetails.quantity}
+                                                                selectedProduct={json.product}
 							/>
 						</div>
 					</Grid>

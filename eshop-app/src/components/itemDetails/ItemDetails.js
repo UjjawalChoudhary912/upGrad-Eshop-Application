@@ -2,7 +2,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import {Card, CardContent, useTheme} from "@mui/material";
 
-const ItemDetail = ({quantity, product}) => {
+const ItemDetail = ({productQuantity, selectedProduct}) => {
 
 	const theme = useTheme();
 
@@ -16,7 +16,7 @@ const ItemDetail = ({quantity, product}) => {
 							<Grid container>
 								<Grid item xs={12}>
 									<Typography variant={"h4"}>
-										{product.name}
+                                    {selectedProduct.name}
 									</Typography>
 								</Grid>
 								<Grid item xs={12} style={{paddingTop: "2%"}}>
@@ -26,7 +26,7 @@ const ItemDetail = ({quantity, product}) => {
 											fontSize: "15px",
 										}}
 									>
-										Quantity: <b>{quantity}</b>
+										Quantity: <b>{productQuantity}</b>
 									</Typography>
 								</Grid>
 								<Grid item xs={12} style={{paddingTop: "2%"}}>
@@ -36,7 +36,7 @@ const ItemDetail = ({quantity, product}) => {
 											fontSize: "15px",
 										}}
 									>
-										category: <b>{product.category}</b>
+										category: <b>{selectedProduct.category}</b>
 									</Typography>
 								</Grid>
 								<Grid item xs={12} style={{paddingTop: "2%"}}>
@@ -47,7 +47,7 @@ const ItemDetail = ({quantity, product}) => {
 											color: theme.palette.disabled.main,
 										}}
 									>
-										<em>{product.description}</em>
+										<em>{selectedProduct.description}</em>
 									</Typography>
 								</Grid>
 								<Grid item xs={12} style={{paddingTop: "2%"}}>
@@ -58,7 +58,7 @@ const ItemDetail = ({quantity, product}) => {
 											color: theme.palette.secondary.main,
 										}}
 									>
-										Total Price : &#8377; {product.price * quantity}
+										Total Price : &#8377; {selectedProduct.price * productQuantity}
 									</Typography>
 								</Grid>
 							</Grid>

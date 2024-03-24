@@ -70,7 +70,7 @@ const Address = ({callbackFunction, address}) => {
 	const {broadcastMessage} = useContext(ServicesCtx);
     const navigate = useNavigate();
 
-	let validateData = () => {
+	let validateAndPersistData = () => {
 		setBusy(true);
 		let data = {
 			...formData
@@ -78,7 +78,7 @@ const Address = ({callbackFunction, address}) => {
 		let requestJson = {
 			user: loggedInUserId,
 		};
-		let valid = true;
+		let validAddress = true;
 		for(let k in formData) {
 			let json = getValidity(k, formData[k].value);
 			data[k] = {
@@ -86,13 +86,13 @@ const Address = ({callbackFunction, address}) => {
 				error: !json.valid,
 				errorMessage: json.message,
 			};
-			valid = valid && json.valid;
+			validAddress = validAddress && json.valid;
 			if(json.valid) {
 				requestJson[k] = data[k].value;
 			}
 		}
 		setFormData(data);
-		if(valid) {
+		if(validAddress) {
             if(isAccessTokenValid()) {
 				createAddress(requestJson, accessToken).then(() => {
 					broadcastMessage("Address saved successfully.", "success");
@@ -269,13 +269,13 @@ const Address = ({callbackFunction, address}) => {
 									onChange={handleChange}
 								>
 									{
-										(addressList === null || addressList.length === 0) &&
+										(addressList === undefined || addressList === null || addressList.length === 0) &&
 										<MenuItem disabled value="">
 											No address saved
 										</MenuItem>
 									}
 									{
-										addressList !== null && addressList.length > 0 &&
+										addressList !== undefined && addressList !== null && addressList.length > 0 &&
 										addressList.map((element, index) => {
 											return (
 												<MenuItem
@@ -429,7 +429,7 @@ const Address = ({callbackFunction, address}) => {
 							<Button variant="contained"
 									color="primary"
 									fullWidth
-									onClick={validateData}
+									onClick={validateAndPersistData}
 							>
 								SAVE ADDRESS
 							</Button>

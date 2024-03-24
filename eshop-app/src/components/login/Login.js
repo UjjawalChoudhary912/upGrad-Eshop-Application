@@ -42,13 +42,13 @@ const Login = () => {
 		loggedInUser && history(from, { replace: true });
 	}, [loggedInUser, from, history]);
 
-	let validateData = () => {
+	let validateAndLoginData = () => {
 		setBusy(true);
 		let data = {
 			...formData
 		};
 		let requestJson = {};
-		let valid = true;
+		let validDetails = true;
 		for(let k in formData) {
 			let json = getValidity(k, formData[k].value);
 			data[k] = {
@@ -56,13 +56,13 @@ const Login = () => {
 				error: !json.valid,
 				errorMessage: json.message,
 			};
-			valid = valid && json.valid;
+			validDetails = validDetails && json.valid;
 			if(json.valid) {
 				requestJson[k] = data[k].value;
 			}
 		}
 		setFormData(data);
-		if(valid) {
+		if(validDetails) {
 			login(requestJson.username, requestJson.password).then(() => {
 				// do nothing
 				broadcastMessage("Login successful", "success");
@@ -117,20 +117,20 @@ const Login = () => {
 		};
 	};
 
-	let validateAndSave = (field, value) => {
-		let json = getValidity(field, value);
+	let validateAndSaveLoginData = (fieldName, fieldValue) => {
+		let json = getValidity(fieldName, fieldValue);
 		let data = {
 			...formData
 		};
-		data[field] = {
-			value: data[field].value,
+		data[fieldName] = {
+			value: data[fieldName].value,
 			error: !json.valid,
 			errorMessage: json.message,
 		}
 		setFormData(data);
 	};
 
-	let saveOnChange = (field, value) => {
+	let saveOnFieldChange = (field, value) => {
 		setFormData({
 			...formData,
 			[field]:{
@@ -175,8 +175,8 @@ const Login = () => {
 										   fullWidth
 										   type="email"
 										   value={formData.username.value}
-										   onChange={(event) => saveOnChange("username", event.target.value)}
-										   onBlur={(event) => validateAndSave("username", event.target.value)}
+										  onChange={(event) => saveOnFieldChange("username", event.target.value)}
+										   onBlur={(event) => validateAndSaveLoginData("username", event.target.value)}
 										   error={formData.username.error}
 										   helperText={formData.username.error && formData.username.errorMessage}
 								/>
@@ -188,8 +188,8 @@ const Login = () => {
 										   fullWidth
 										   type="password"
 										   value={formData.password.value}
-										   onChange={(event) => saveOnChange("password", event.target.value)}
-										   onBlur={(event) => validateAndSave("password", event.target.value)}
+										   onChange={(event) => saveOnFieldChange("password", event.target.value)}
+										   onBlur={(event) => validateAndSaveLoginData("password", event.target.value)}
 										   error={formData.password.error}
 										   helperText={formData.password.error && formData.password.errorMessage}
 								/>
@@ -198,7 +198,7 @@ const Login = () => {
 								<Button variant="contained"
 										color="primary"
 										fullWidth
-										onClick={validateData}
+										onClick={validateAndLoginData}
 								>
 									SIGN IN
 								</Button>

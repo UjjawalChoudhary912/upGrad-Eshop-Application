@@ -98,7 +98,23 @@ const OrderDetails = ({quantity, product, address}) => {
 											fontSize: "15px",
 										}}
 									>
-										{address.street}, {address.landmark}, {address.city}
+																				{
+											((address) => {
+												if(address.landmark !== null) {
+													return (
+														<>
+															{address.street}, {address.landmark}, {address.city}
+														</>
+													);
+												} else {
+													return (
+														<>
+															{address.street}, {address.city}
+														</>
+													);
+												}
+											})(address)
+										}
 									</Typography>
 								</Grid>
 								<Grid item xs={12}>

@@ -61,16 +61,16 @@ const SignUp = () => {
 		};
 		let requestJson = {};
 		let valid = true;
-		for(let k in formData) {
-			let json = getValidity(k, formData[k].value);
-			data[k] = {
-				value: data[k].value,
+		for(let i in formData) {
+			let json = getValidity(i, formData[i].value);
+			data[i] = {
+				value: data[i].value,
 				error: !json.valid,
 				errorMessage: json.message,
 			};
 			valid = valid && json.valid;
 			if(json.valid) {
-				requestJson[k] = data[k].value;
+				requestJson[i] = data[i].value;
 			}
 		}
 		setFormData(data);
@@ -162,13 +162,13 @@ const SignUp = () => {
 		};
 	};
 
-	let validateAndSave = (field, value) => {
-		let json = getValidity(field, value);
+	let validateAndSaveInMemory = (fieldName, value) => {
+		let json = getValidity(fieldName, value);
 		let data = {
 			...formData
 		};
-		data[field] = {
-			value: data[field].value,
+		data[fieldName] = {
+			value: data[fieldName].value,
 			error: !json.valid,
 			errorMessage: json.message,
 		}
@@ -220,7 +220,7 @@ const SignUp = () => {
 										   fullWidth
 										   value={formData.firstName.value}
 										   onChange={(event) => saveOnChange("firstName", event.target.value)}
-										   onBlur={(event) => validateAndSave("firstName", event.target.value)}
+										   onBlur={(event) => validateAndSaveInMemory("firstName", event.target.value)}
 										   error={formData.firstName.error}
 										   helperText={formData.firstName.error && formData.firstName.errorMessage}
 								/>
@@ -232,7 +232,7 @@ const SignUp = () => {
 										   fullWidth
 										   value={formData.lastName.value}
 										   onChange={(event) => saveOnChange("lastName", event.target.value)}
-										   onBlur={(event) => validateAndSave("lastName", event.target.value)}
+										   onBlur={(event) => validateAndSaveInMemory("lastName", event.target.value)}
 										   error={formData.lastName.error}
 										   helperText={formData.lastName.error && formData.lastName.errorMessage}
 								/>
@@ -245,7 +245,7 @@ const SignUp = () => {
 										   type="email"
 										   value={formData.email.value}
 										   onChange={(event) => saveOnChange("email", event.target.value)}
-										   onBlur={(event) => validateAndSave("email", event.target.value)}
+										   onBlur={(event) => validateAndSaveInMemory("email", event.target.value)}
 										   error={formData.email.error}
 										   helperText={formData.email.error && formData.email.errorMessage}
 								/>
@@ -258,7 +258,7 @@ const SignUp = () => {
 										   type="password"
 										   value={formData.password.value}
 										   onChange={(event) => saveOnChange("password", event.target.value)}
-										   onBlur={(event) => validateAndSave("password", event.target.value)}
+										   onBlur={(event) => validateAndSaveInMemory("password", event.target.value)}
 										   error={formData.password.error}
 										   helperText={formData.password.error && formData.password.errorMessage}
 								/>
@@ -271,7 +271,7 @@ const SignUp = () => {
 										   type="password"
 										   value={formData.confirmPassword.value}
 										   onChange={(event) => saveOnChange("confirmPassword", event.target.value)}
-										   onBlur={(event) => validateAndSave("confirmPassword", event.target.value)}
+										   onBlur={(event) => validateAndSaveInMemory("confirmPassword", event.target.value)}
 										   error={formData.confirmPassword.error}
 										   helperText={formData.confirmPassword.error && formData.confirmPassword.errorMessage}
 								/>
@@ -283,7 +283,7 @@ const SignUp = () => {
 										   fullWidth
 										   value={formData.contactNumber.value}
 										   onChange={(event) => saveOnChange("contactNumber", event.target.value)}
-										   onBlur={(event) => validateAndSave("contactNumber", event.target.value)}
+										   onBlur={(event) => validateAndSaveInMemory("contactNumber", event.target.value)}
 										   error={formData.contactNumber.error}
 										   helperText={formData.contactNumber.error && formData.contactNumber.errorMessage}
 								/>
