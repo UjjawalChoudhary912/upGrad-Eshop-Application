@@ -10,7 +10,7 @@ export const fetchAllAddresses = (accessToken) => {
 	fetch('http://localhost:8080/api/addresses', {
 		method: 'GET',
 		headers: {
-			'Authorization': 'Bearer ' + accessToken,
+			'x-auth-token': accessToken,
 		},
 	}).then((response) => {
 		response.json().then((json) => {
@@ -53,7 +53,7 @@ export const createAddress = (requestJson, accessToken) => {
 		body: JSON.stringify(requestJson),
 		headers: {
 			'Content-type': 'application/json; charset=UTF-8',
-			'Authorization': 'Bearer ' + accessToken,
+			'x-auth-token': accessToken,
 		},
 	}).then((response) => {
 		response.text().then((json) => {

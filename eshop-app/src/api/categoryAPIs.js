@@ -8,7 +8,7 @@ export const fetchAllCategories = (accessToken) => {
 	fetch('http://localhost:8080/api/products/categories', {
 		method: 'GET',
 		headers: {
-			'Authorization': 'Bearer ' + accessToken,
+			'x-auth-token': accessToken,
 		},
 	}).then((response) => {
 		response.json().then((json) => {
