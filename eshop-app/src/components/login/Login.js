@@ -90,8 +90,13 @@ const Login = () => {
 		} else {
 			switch (field) {
 				case "username": {
-					valid = matchRegex(value, "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$");
-					message = "Please enter valid email address.";
+                    if(value.length > 255) {
+						valid = false;
+						message = "Email can be of length 255 characters";
+					} else {
+						valid = matchRegex(value, "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$");
+						message = "Please enter valid email.";
+					}
 					break;
 				}
 				case "password": {

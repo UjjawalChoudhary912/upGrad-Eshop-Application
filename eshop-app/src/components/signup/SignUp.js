@@ -102,18 +102,33 @@ const SignUp = () => {
 		} else {
 			switch (field) {
 				case "firstName": {
-					valid = matchRegex(value, "^([A-Za-z]+)$");
-					message = "Please enter valid first name.";
+                    if(value.length > 255) {
+						valid = false;
+						message = "First name can be of length 255 characters";
+					} else {
+						valid = matchRegex(value, "^([A-Za-z]+)$");
+						message = "Please enter valid first name.";
+					}
 					break;
 				}
 				case "lastName": {
-					valid = matchRegex(value, "^([A-Za-z]+)$");
-					message = "Please enter valid last name.";
+					if(value.length > 255) {
+						valid = false;
+						message = "Last name can be of length 255 characters";
+					} else {
+						valid = matchRegex(value, "^([A-Za-z]+)$");
+						message = "Please enter valid last name.";
+					}
 					break;
 				}
 				case "email": {
-					valid = matchRegex(value, "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$");
-					message = "Please enter valid email address.";
+                    if(value.length > 255) {
+						valid = false;
+						message = "Email can be of length 255 characters";
+					} else {
+						valid = matchRegex(value, "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$");
+						message = "Please enter valid email.";
+					}
 					break;
 				}
 				case "password": {

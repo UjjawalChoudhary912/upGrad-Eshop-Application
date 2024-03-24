@@ -130,8 +130,13 @@ const Address = ({callbackFunction, address}) => {
 		} else {
 			switch (field) {
 				case "name": {
-					valid = matchRegex(value, "^([A-Za-z\\s]+)$");
-					message = "Please enter valid name.";
+                    if(value.length > 255) {
+						valid = false;
+						message = "Name can be of length 255 characters";
+					} else {
+						valid = matchRegex(value, "^([A-Za-z\\s]+)$");
+						message = "Please enter valid name.";
+					}
 					break;
 				}
 				case "contactNumber": {
@@ -140,23 +145,43 @@ const Address = ({callbackFunction, address}) => {
 					break;
 				}
 				case "street": {
-					valid = matchRegex(value, "^([A-Za-z0-9,/\\s\\-_@]+)$");
-					message = "Please enter valid street.";
+                    if(value.length > 255) {
+						valid = false;
+						message = "Street can be of length 255 characters";
+					} else {
+						valid = matchRegex(value, "^([A-Za-z0-9,/\\s\\-_@]+)$");
+						message = "Please enter valid street.";
+					}
 					break;
 				}
 				case "city": {
-					valid = matchRegex(value, "^([A-Za-z]+)$");
-					message = "Please enter valid city.";
+                    if(value.length > 255) {
+						valid = false;
+						message = "City can be of length 255 characters";
+					} else {
+						valid = matchRegex(value, "^([A-Za-z]+)$");
+						message = "Please enter valid city.";
+					}
 					break;
 				}
 				case "state": {
-					valid = matchRegex(value, "^([A-Za-z\\s]+)$");
-					message = "Please enter valid state.";
+					if(value.length > 255) {
+						valid = false;
+						message = "State can be of length 255 characters";
+					} else {
+						valid = matchRegex(value, "^([A-Za-z\\s]+)$");
+						message = "Please enter valid state.";
+					}
 					break;
 				}
 				case "landmark": {
-					valid = matchRegex(value, "^([A-Za-z0-9,/\\s\\-_@]+)$");
-					message = "Please enter valid landmark.";
+                    if(value.length > 255) {
+						valid = false;
+						message = "Landmark can be of length 255 characters";
+					} else {
+						valid = matchRegex(value, "^([A-Za-z0-9,/\\s\\-_@]+)$");
+						message = "Please enter valid landmark.";
+					}
 					break;
 				}
 				case "zipcode": {
